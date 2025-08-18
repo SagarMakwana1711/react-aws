@@ -13,6 +13,7 @@ function copyPropsSafe(target, source) {
   return target;
 }
 
+
 function toJsonResponse(resp) {
   var ok = resp.ok;
   return resp
