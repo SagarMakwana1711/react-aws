@@ -9,7 +9,7 @@ const ROUTE_HOME = '#/';
 const ROUTE_LOGIN = '#/login';
 const ROUTE_SIGNUP = '#/signup';
 const TOKEN_KEY = 'nebula_token';
-const TITLE = 'Nebula Auth';
+const TITLE = 'AWS Tutorials';
 
 function getRoute() {
   return window.location.hash || ROUTE_HOME;
