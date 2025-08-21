@@ -1,9 +1,22 @@
-const API_BASE_URL = 'https://your-backend.example.com'; // ← set this
+const ENV_KEY = 'REACT_APP_API_URL';
 const PATH_LOGIN = '/api/auth/login';
 const PATH_SIGNUP = '/api/auth/signup';
 const CT_JSON = 'application/json';
 const MSG_INVALID_JSON = 'Invalid JSON';
 const MSG_REQUEST_FAILED = 'Request failed';
+
+function readBaseUrl() {
+  var raw = process.env[ENV_KEY] || '';
+  if (!raw) return '';
+  try {
+    var u = new URL(raw);
+    return u.origin;
+  } catch (e) {
+    return raw;
+  }
+}
+
+const API_BASE_URL = readBaseUrl();
 
 function copyPropsSafe(target, source) {
   if (!source || typeof source !== 'object') return target;
@@ -12,7 +25,6 @@ function copyPropsSafe(target, source) {
   }
   return target;
 }
-
 
 function toJsonResponse(resp) {
   var ok = resp.ok;
