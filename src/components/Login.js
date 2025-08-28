@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const TITLE = 'Welcome back';
 const BTN_TEXT = 'Sign in';
@@ -9,12 +9,23 @@ const PH_USERNAME = 'your-username';
 const PH_PASSWORD = '••••••••';
 const CTA_NEW = 'New here?';
 const CTA_SWITCH = 'Create an account';
+const MSG_CREATED = 'Signup complete. Please sign in.';
+
+function readCreatedFlag() {
+  const h = window.location.hash || '';
+  return h.includes('created=1');
+}
 
 export default function Login({ onLogin, switchToSignup }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
+  const [notice, setNotice] = useState('');
+
+  useEffect(() => {
+    setNotice(readCreatedFlag() ? MSG_CREATED : '');
+  }, []);
 
   async function submit(e) {
     e.preventDefault();
@@ -33,6 +44,9 @@ export default function Login({ onLogin, switchToSignup }) {
     <section className="auth-wrap">
       <div className="auth-card">
         <h1 className="auth-title">{TITLE}</h1>
+
+        {notice && <div className="notice">{notice}</div>}
+
         <form onSubmit={submit} className="auth-form">
           <label className="field">
             <span className="field-label">{USER_TEXT}</span>

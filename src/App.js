@@ -11,6 +11,7 @@ const ROUTE_SIGNUP = '#/signup';
 
 const TOKEN_KEY = 'nebula_token';
 const TITLE = 'AWS Tutorials';
+const QS_CREATED = 'created=1';
 
 function getRoute() {
   return window.location.hash || ROUTE_HOME;
@@ -18,6 +19,10 @@ function getRoute() {
 
 function navigate(to) {
   window.location.hash = to;
+}
+
+function goLoginWithCreatedFlag() {
+  navigate(ROUTE_LOGIN + '?' + QS_CREATED);
 }
 
 export default function App() {
@@ -32,14 +37,14 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (authed && (route === ROUTE_LOGIN || route === ROUTE_SIGNUP)) navigate(ROUTE_HOME);
+    if (authed && (route.startsWith(ROUTE_LOGIN) || route === ROUTE_SIGNUP)) navigate(ROUTE_HOME);
     if (!authed && route === ROUTE_HOME) navigate(ROUTE_LOGIN);
   }, [authed, route]);
 
   async function handleLogin(username, password) {
     const res = await apiLogin(username, password);
-    if (res.ok && res.token) {
-      storeToken(TOKEN_KEY, res.token);
+    if (res.ok && res.access_token) {
+      storeToken(TOKEN_KEY, res.access_token);
       setAuthed(true);
       navigate(ROUTE_HOME);
       return { ok: true };
@@ -49,10 +54,9 @@ export default function App() {
 
   async function handleSignup(username, password) {
     const res = await apiSignup(username, password);
-    if (res.ok && res.token) {
-      storeToken(TOKEN_KEY, res.token);
-      setAuthed(true);
-      navigate(ROUTE_HOME);
+    if (res.ok) {
+      // do NOT auto-login; send user to login page with success flag
+      goLoginWithCreatedFlag();
       return { ok: true };
     }
     return { ok: false, message: res.message || 'Signup failed' };

@@ -27,6 +27,7 @@ export default function Signup({ onSignup, switchToLogin }) {
     const res = await onSignup(username.trim(), password);
     setBusy(false);
     if (!res.ok) setError(res.message);
+    // on success, App.js navigates to #/login?created=1
   }
 
   return (

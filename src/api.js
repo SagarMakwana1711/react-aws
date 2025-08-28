@@ -1,10 +1,10 @@
 const ENV_KEY = 'REACT_APP_API_URL';
 
-// endpoints (backend swagger showed POST /users/ for signup)
-const PATH_LOGIN = '/login/';
+const PATH_LOGIN = '/users/login';
 const PATH_SIGNUP = '/users/';
 
 const CT_JSON = 'application/json';
+const CT_FORM = 'application/x-www-form-urlencoded';
 const MSG_INVALID_JSON = 'Invalid JSON';
 const MSG_REQUEST_FAILED = 'Request failed';
 
@@ -61,17 +61,24 @@ export function clearToken(key) {
   localStorage.removeItem(key);
 }
 
-// login expects { username, password }
+// LOGIN: form-encoded per your Swagger (/users/login)
 export async function apiLogin(username, password) {
+  const body = new URLSearchParams({
+    grant_type: 'password',
+    username: username,
+    password: password,
+    scope: ''
+  }).toString();
+
   const r = await fetch(API_BASE_URL + PATH_LOGIN, {
     method: 'POST',
-    headers: { 'Content-Type': CT_JSON },
-    body: JSON.stringify({ username: username, password: password })
+    headers: { 'Content-Type': CT_FORM },
+    body
   });
   return toJsonResponse(r);
 }
 
-// signup expects { username, password }
+// SIGNUP: JSON to /users/
 export async function apiSignup(username, password) {
   const r = await fetch(API_BASE_URL + PATH_SIGNUP, {
     method: 'POST',
