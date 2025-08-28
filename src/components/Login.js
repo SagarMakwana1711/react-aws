@@ -2,12 +2,16 @@ import React, { useState } from 'react';
 
 const TITLE = 'Welcome back';
 const BTN_TEXT = 'Sign in';
-const EMAIL_TEXT = 'Email';
+const USER_TEXT = 'Username';
 const PASS_TEXT = 'Password';
 const ERR_DEFAULT = 'Please fill all fields';
+const PH_USERNAME = 'your-username';
+const PH_PASSWORD = '••••••••';
+const CTA_NEW = 'New here?';
+const CTA_SWITCH = 'Create an account';
 
 export default function Login({ onLogin, switchToSignup }) {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
@@ -15,12 +19,12 @@ export default function Login({ onLogin, switchToSignup }) {
   async function submit(e) {
     e.preventDefault();
     setError('');
-    if (!email || !password) {
+    if (!username || !password) {
       setError(ERR_DEFAULT);
       return;
     }
     setBusy(true);
-    const res = await onLogin(email.trim(), password);
+    const res = await onLogin(username.trim(), password);
     setBusy(false);
     if (!res.ok) setError(res.message);
   }
@@ -31,13 +35,13 @@ export default function Login({ onLogin, switchToSignup }) {
         <h1 className="auth-title">{TITLE}</h1>
         <form onSubmit={submit} className="auth-form">
           <label className="field">
-            <span className="field-label">{EMAIL_TEXT}</span>
+            <span className="field-label">{USER_TEXT}</span>
             <input
-              type="email"
+              type="text"
               className="input"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder={PH_USERNAME}
               autoComplete="username"
             />
           </label>
@@ -49,7 +53,7 @@ export default function Login({ onLogin, switchToSignup }) {
               className="input"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
+              placeholder={PH_PASSWORD}
               autoComplete="current-password"
             />
           </label>
@@ -62,8 +66,8 @@ export default function Login({ onLogin, switchToSignup }) {
         </form>
 
         <div className="switch">
-          New here?
-          <button className="link" onClick={switchToSignup}>Create an account</button>
+          {CTA_NEW}{' '}
+          <button className="link" onClick={switchToSignup}>{CTA_SWITCH}</button>
         </div>
       </div>
     </section>

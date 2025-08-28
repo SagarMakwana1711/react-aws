@@ -8,6 +8,7 @@ import Dashboard from './components/Dashboard';
 const ROUTE_HOME = '#/';
 const ROUTE_LOGIN = '#/login';
 const ROUTE_SIGNUP = '#/signup';
+
 const TOKEN_KEY = 'nebula_token';
 const TITLE = 'AWS Tutorials';
 
@@ -31,16 +32,12 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (authed && (route === ROUTE_LOGIN || route === ROUTE_SIGNUP)) {
-      navigate(ROUTE_HOME);
-    }
-    if (!authed && route === ROUTE_HOME) {
-      navigate(ROUTE_LOGIN);
-    }
+    if (authed && (route === ROUTE_LOGIN || route === ROUTE_SIGNUP)) navigate(ROUTE_HOME);
+    if (!authed && route === ROUTE_HOME) navigate(ROUTE_LOGIN);
   }, [authed, route]);
 
-  async function handleLogin(email, password) {
-    const res = await apiLogin(email, password);
+  async function handleLogin(username, password) {
+    const res = await apiLogin(username, password);
     if (res.ok && res.token) {
       storeToken(TOKEN_KEY, res.token);
       setAuthed(true);
@@ -50,8 +47,8 @@ export default function App() {
     return { ok: false, message: res.message || 'Login failed' };
   }
 
-  async function handleSignup(name, email, password) {
-    const res = await apiSignup(name, email, password);
+  async function handleSignup(username, password) {
+    const res = await apiSignup(username, password);
     if (res.ok && res.token) {
       storeToken(TOKEN_KEY, res.token);
       setAuthed(true);

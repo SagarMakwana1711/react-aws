@@ -1,17 +1,20 @@
 const ENV_KEY = 'REACT_APP_API_URL';
-const PATH_LOGIN = '/api/auth/login';
-const PATH_SIGNUP = '/api/auth/signup';
+
+// endpoints (backend swagger showed POST /users/ for signup)
+const PATH_LOGIN = '/login/';
+const PATH_SIGNUP = '/users/';
+
 const CT_JSON = 'application/json';
 const MSG_INVALID_JSON = 'Invalid JSON';
 const MSG_REQUEST_FAILED = 'Request failed';
 
 function readBaseUrl() {
-  var raw = process.env[ENV_KEY] || '';
+  const raw = process.env[ENV_KEY] || '';
   if (!raw) return '';
   try {
-    var u = new URL(raw);
+    const u = new URL(raw);
     return u.origin;
-  } catch (e) {
+  } catch (_e) {
     return raw;
   }
 }
@@ -20,14 +23,14 @@ const API_BASE_URL = readBaseUrl();
 
 function copyPropsSafe(target, source) {
   if (!source || typeof source !== 'object') return target;
-  for (var k in source) {
+  for (const k in source) {
     if (Object.prototype.hasOwnProperty.call(source, k)) target[k] = source[k];
   }
   return target;
 }
 
 function toJsonResponse(resp) {
-  var ok = resp.ok;
+  const ok = resp.ok;
   return resp
     .json()
     .then(function (data) {
@@ -37,7 +40,7 @@ function toJsonResponse(resp) {
           message: (data && data.message) ? data.message : MSG_REQUEST_FAILED
         };
       }
-      var result = { ok: true };
+      const result = { ok: true };
       return copyPropsSafe(result, data);
     })
     .catch(function () {
@@ -46,7 +49,7 @@ function toJsonResponse(resp) {
 }
 
 export function getStoredToken(key) {
-  var tok = localStorage.getItem(key);
+  const tok = localStorage.getItem(key);
   return tok || '';
 }
 
@@ -58,20 +61,22 @@ export function clearToken(key) {
   localStorage.removeItem(key);
 }
 
-export async function apiLogin(email, password) {
-  var r = await fetch(API_BASE_URL + PATH_LOGIN, {
+// login expects { username, password }
+export async function apiLogin(username, password) {
+  const r = await fetch(API_BASE_URL + PATH_LOGIN, {
     method: 'POST',
     headers: { 'Content-Type': CT_JSON },
-    body: JSON.stringify({ email: email, password: password })
+    body: JSON.stringify({ username: username, password: password })
   });
   return toJsonResponse(r);
 }
 
-export async function apiSignup(name, email, password) {
-  var r = await fetch(API_BASE_URL + PATH_SIGNUP, {
+// signup expects { username, password }
+export async function apiSignup(username, password) {
+  const r = await fetch(API_BASE_URL + PATH_SIGNUP, {
     method: 'POST',
     headers: { 'Content-Type': CT_JSON },
-    body: JSON.stringify({ name: name, email: email, password: password })
+    body: JSON.stringify({ username: username, password: password })
   });
   return toJsonResponse(r);
 }
