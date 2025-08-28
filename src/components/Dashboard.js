@@ -1,7 +1,7 @@
 import React from 'react';
 
 const WELCOME = 'Welcome to Nebula';
-const SUB = 'You are logged in. Replace this with your app content.';
+const SUB = 'You are logged in';
 
 export default function Dashboard({ onLogout }) {
   return (
