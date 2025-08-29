@@ -16,6 +16,7 @@ function readCreatedFlag() {
   return h.includes('created=1');
 }
 
+
 export default function Login({ onLogin, switchToSignup }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
