@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-const TITLE = 'Welcome back here';
+const TITLE = 'Welcome back for cache';
 const BTN_TEXT = 'Sign in';
 const USER_TEXT = 'Username';
 const PASS_TEXT = 'Password';
